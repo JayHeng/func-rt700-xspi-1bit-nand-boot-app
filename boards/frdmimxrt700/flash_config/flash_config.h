@@ -125,9 +125,15 @@ typedef struct _XSPIConfig
     uint8_t configCmdEnable;         /* !< [0x01c-0x01c] Configure command Enable Flag, 1 - Enable, 0 - Disable */
     uint8_t configModeType[3];       /* !< [0x01d-0x01f] Configure Mode Type, similar as deviceModeTpe */
     fc_xspi_lut_seq_t configCmdSeqs[3]; /* !< [0x020-0x02b] Sequence info for Device Configuration command, similar as deviceModeSeq */
-    uint32_t reserved1;                 /* !< [0x02c-0x02f] Reserved for future use */
+    uint8_t  ipedMode;                  //!< [0x02c] IPED mode: 0=None,1=CTR,2=GCM,3=XEX
+    uint8_t  x16DllaSlvFineOffset;      //!< [0x02d] Fine offset delay elements for incoming DQS1
+    uint8_t  maxCsLowInterval;          //!< [0x02e] PSRAM tCSM, unit 0.1us
+    uint8_t  ahbAlignment;              //!< [0x02f] AHB alignment: 0=None,1=256B,2=512B,3=1KB
+    //uint32_t reserved1;                 /* !< [0x02c-0x02f] Reserved for future use */
     uint32_t configCmdArgs[3];          /* !< [0x030-0x03b] Arguments/Parameters for device Configuration commands */
-    uint32_t reserved2;                 /* !< [0x03c-0x03f] Reserved for future use */
+    uint8_t  ahbSplitEn;                //!< [0x03c] Enable AHB transaction split for PSRAM
+    uint8_t reserved2[3];               /* !< [0x03d-0x03f] Reserved for future use */
+    //uint32_t reserved2;               /* !< [0x03c-0x03f] Reserved for future use */
     uint32_t controllerMiscOption;      /* !< [0x040-0x043] Controller Misc Options.
 					   Bit 0: Differential clock enable: 1 for HyperFlash NOR flash memory 1V8 device and 0 for other devices
                                            Bit 3: WordAddressableEnable: 1 for HyperFlash NOR flash memory and 0 for other devices
@@ -205,6 +211,28 @@ typedef struct _fc_xspi_nor_config
 } fc_xspi_nor_config_t;
 
 /*
+ *  Serial NAND configuration block
+ */
+typedef struct _xspi_nand_config
+{
+    fc_xspi_mem_config_t memConfig; //!< [0x000-0x227] Generic Memory configuration block over FlexSPI
+    uint32_t pageDataSize;       //!< [0x228-0x22b] Data Size in one page, usually it is 2048 or 4096
+    uint32_t pageTotalSize;   //!< [0x22c-0x22f] Total size in one page, usually, it equals 2 ^ width of column address
+    uint32_t pagesPerBlock;   //!< [0x230-0x233] Pages per block
+    uint8_t bypassReadStatus; //!< [0x234-0x234] Bypass Read Status
+    uint8_t bypassEccRead;    //!< [0x235-0x235] Bypass ECC check
+    uint8_t hasMultiPlanes;   //!< [0x236-0x236] Has multiple planes
+    uint8_t skipOddBlocks;    //!< [0x237-0x237] Skip odd blocks
+    uint8_t eccCheckCustomEnable; //!< [0x238-0x238] Determine if use the customized ECC check related masks
+    uint8_t ipCmdSerialClkFreq;   //!< [0x239-0x239] IP Command Serial Clock Frequency, keep 0
+    uint16_t readPageTimeUs;  //!< [0x23a-0x23b] Time needed for read page to cache, effective when bypassReadStatus=1
+    uint32_t eccStatusMask;   //!< [0x23c-0x23f] ECC status mask
+    uint32_t eccFailureMask;  //!< [0x240-0x243] ECC failure mask
+    uint32_t blocksPerDevice; //!< [0x244-0x247] Blocks per device, not used in ROM
+    uint32_t reserved1[8];    //!< [0x248-0x267] Reserved for future use.
+} fc_xspi_nand_config_t;
+
+/*
  *  Serial PSRAM configuration block
  */
 typedef struct _fc_xspi_psram_config
@@ -222,4 +250,47 @@ typedef struct {
                                                users' usage, Boot ROM doesn't use this part */
     uint8_t reserved[1792];              /* !< Reserved for future usage */
 } fc_static_platform_config_t;
+
+
+typedef struct _firmware_info
+{
+    uint32_t startPage;             //!< [+0x0] Firmware start page index
+    uint32_t pagesInFirmware;       //!< [+0x4] Number of pages in this firmware copy
+} firmware_info_t;
+
+typedef struct _fc_xmcd_info
+{
+    union
+    {
+        struct
+        {
+            uint32_t size            : 12; //!< Size in bytes
+            uint32_t configBlockType :  4; //!< Config block type
+            uint32_t instance        :  4; //!< XSPI instance
+            uint32_t memoryInterface :  4; //!< Memory interface type
+            uint32_t version         :  4; //!< Version
+            uint32_t tag             :  4; //!< Tag
+        } B;
+        uint32_t U;
+    } xmc_header;
+    uint32_t xmc_option[5];
+} fc_xmcd_info_t;
+
+typedef struct _xSpiFCBStruct_t
+{
+    uint32_t crcChecksum;                            //!< [0x000-0x003]
+    uint32_t fingerprint;                            //!< [0x004-0x007]
+    uint32_t version;                                //!< [0x008-0x00b]
+    uint32_t DBBTSearchAreaStartPage;                //!< [0x00c-0x00f]
+    uint16_t searchStride;                           //!< [0x010-0x011] Not used by ROM
+    uint16_t searchCount;                            //!< [0x012-0x013] Not used by ROM
+    uint32_t firmwareCopies;                         //!< [0x014-0x017]
+    uint32_t reserved0[10];                          //!< [0x018-0x03f]
+    firmware_info_t firmwareTable[8];                //!< [0x040-0x07f]
+    uint32_t reserved1[32];                          //!< [0x080-0x0ff];
+    fc_xspi_nand_config_t nand_config;               //!< [0x100-0x367];
+    fc_xmcd_info_t xmc_config;                     //!< [0x368-0x37f];
+    uint32_t reserved2[32];                          //!< [0x380-0x3ff];
+} fc_xspi_nfcb_t;
+ 
 #endif
