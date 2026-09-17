@@ -2,7 +2,7 @@
 <project>
     <fileVersion>4</fileVersion>
     <configuration>
-        <name>flash_debug</name>
+        <name>debug</name>
         <toolchain>
             <name>ARM</name>
         </toolchain>
@@ -25,19 +25,19 @@
                 </option>
                 <option>
                     <name>BrowseInfoPath</name>
-                    <state>Debug\BrowseInfo</state>
+                    <state>debug\BrowseInfo</state>
                 </option>
                 <option>
                     <name>ExePath</name>
-                    <state>$PROJ_DIR$/flash_debug</state>
+                    <state>debug\Exe</state>
                 </option>
                 <option>
                     <name>ObjPath</name>
-                    <state>$PROJ_DIR$/flash_debug/obj</state>
+                    <state>debug\Obj</state>
                 </option>
                 <option>
                     <name>ListPath</name>
-                    <state>$PROJ_DIR$/flash_debug/list</state>
+                    <state>debug\List</state>
                 </option>
                 <option>
                     <name>GEndianMode</name>
@@ -210,7 +210,7 @@
                 </option>
                 <option>
                     <name>BuildFilesPath</name>
-                    <state>Debug</state>
+                    <state>debug\</state>
                 </option>
                 <option>
                     <name>PointerAuthentication</name>
@@ -747,7 +747,7 @@
                 </option>
                 <option>
                     <name>IlinkOutputFile</name>
-                    <state>gpio_led_output_cm33_core0.out</state>
+                    <state>led_romapi_cm33_core0.out</state>
                 </option>
                 <option>
                     <name>IlinkDebugInfoEnable</name>
@@ -1144,7 +1144,7 @@
         </settings>
     </configuration>
     <configuration>
-        <name>flash_release</name>
+        <name>release</name>
         <toolchain>
             <name>ARM</name>
         </toolchain>
@@ -1167,19 +1167,19 @@
                 </option>
                 <option>
                     <name>BrowseInfoPath</name>
-                    <state>Release\BrowseInfo</state>
+                    <state>release\BrowseInfo</state>
                 </option>
                 <option>
                     <name>ExePath</name>
-                    <state>$PROJ_DIR$/flash_release</state>
+                    <state>release\Exe</state>
                 </option>
                 <option>
                     <name>ObjPath</name>
-                    <state>$PROJ_DIR$/flash_release/obj</state>
+                    <state>release\Obj</state>
                 </option>
                 <option>
                     <name>ListPath</name>
-                    <state>$PROJ_DIR$/flash_release/list</state>
+                    <state>release\List</state>
                 </option>
                 <option>
                     <name>GEndianMode</name>
@@ -1352,7 +1352,7 @@
                 </option>
                 <option>
                     <name>BuildFilesPath</name>
-                    <state>Release</state>
+                    <state>release\</state>
                 </option>
                 <option>
                     <name>PointerAuthentication</name>
@@ -1889,7 +1889,7 @@
                 </option>
                 <option>
                     <name>IlinkOutputFile</name>
-                    <state>gpio_led_output_cm33_core0.out</state>
+                    <state>led_romapi_cm33_core0.out</state>
                 </option>
                 <option>
                     <name>IlinkDebugInfoEnable</name>

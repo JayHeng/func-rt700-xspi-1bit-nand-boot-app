@@ -64,6 +64,8 @@ int main(void)
 
     /* Init output LED GPIO. */
     GPIO_PinInit(BOARD_LED_GPIO, BOARD_LED_GPIO_PIN, &led_config);
+    
+    //SYSCON3->ROM_SCRATCH1_POR = 0;
 
     while (1)
     {

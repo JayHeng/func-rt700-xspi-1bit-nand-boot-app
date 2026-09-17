@@ -194,7 +194,9 @@ typedef struct {
   __IO uint32_t DEBUG_FEATURES;                    /**< Cortex Debug Features Control, offset: 0x814 */
   __IO uint32_t DEBUG_FEATURES_DP;                 /**< Cortex Debug Features Control, offset: 0x818 */
   __IO uint32_t DEBUG_AUTH_BEACON;                 /**< Debug Authentication Beacon, offset: 0x81C */
-       uint8_t RESERVED_9[832];
+       uint8_t RESERVED_9_0[16];
+  __IO uint32_t ROM_SCRATCH1_POR;                  /**< ROM_SCRATCH1_POR, offset: 0x830 */
+       uint8_t RESERVED_9_1[812];
   __IO uint32_t GRAY_CODE_LSB;                     /**< Gray to Binary Converter - Gray Code [31:0], offset: 0xB60 */
   __IO uint32_t GRAY_CODE_MSB;                     /**< Gray to Binary Converter - Gray Code [63:32], offset: 0xB64 */
   __I  uint32_t BINARY_CODE_LSB;                   /**< Gray to Binary Converter - Binary Code [31:0], offset: 0xB68 */

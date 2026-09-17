@@ -2,7 +2,7 @@
 <project>
     <fileVersion>4</fileVersion>
     <configuration>
-        <name>flash_debug</name>
+        <name>debug</name>
         <toolchain>
             <name>ARM</name>
         </toolchain>
@@ -1662,7 +1662,7 @@
         </debuggerPlugins>
     </configuration>
     <configuration>
-        <name>flash_release</name>
+        <name>release</name>
         <toolchain>
             <name>ARM</name>
         </toolchain>
