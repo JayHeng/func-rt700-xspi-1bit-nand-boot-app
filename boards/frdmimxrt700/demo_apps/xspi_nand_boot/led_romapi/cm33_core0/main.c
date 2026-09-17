@@ -10,6 +10,9 @@
 #include "fsl_debug_console.h"
 #include "fsl_gpio.h"
 #include "app.h"
+#include "fsl_common.h"
+#include "fsl_iopctl.h"
+#include "pin_mux.h"
 
 /*******************************************************************************
  * Definitions
@@ -33,7 +36,7 @@ void delay(void);
 void delay(void)
 {
     volatile uint32_t i = 0;
-    for (i = 0; i < 800000; ++i)
+    for (i = 0; i < 16000000; ++i)
     {
         __asm("NOP"); /* delay */
     }
@@ -66,5 +69,15 @@ int main(void)
     {
         delay();
         GPIO_PortToggle(BOARD_LED_GPIO, 1u << BOARD_LED_GPIO_PIN);
+#if 0
+        GPIO_PortToggle(GPIO5, 1u << BOARD_INITXSPI1PINS_XSPI1_SS0_N_PIN);
+        GPIO_PortToggle(GPIO5, 1u << BOARD_INITXSPI1PINS_XSPI1_DATA0_PIN);
+        GPIO_PortToggle(GPIO5, 1u << BOARD_INITXSPI1PINS_XSPI1_SCLK0_PIN);
+        GPIO_PortToggle(GPIO5, 1u << BOARD_INITXSPI1PINS_XSPI1_DATA1_PIN);
+        GPIO_PortToggle(GPIO5, 1u << BOARD_INITXSPI1PINS_XSPI1_DATA2_PIN);
+        GPIO_PortToggle(GPIO5, 1u << BOARD_INITXSPI1PINS_XSPI1_DATA3_PIN);
+        GPIO_PortToggle(GPIO5, 1u << BOARD_INITXSPI1PINS_XSPI1_DQS0_PIN);
+#endif
     }
 }
+

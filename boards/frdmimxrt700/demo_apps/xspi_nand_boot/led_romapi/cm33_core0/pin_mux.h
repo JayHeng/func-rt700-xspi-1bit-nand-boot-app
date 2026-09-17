@@ -2033,6 +2033,8 @@ void BOARD_InitWIFIPins(void); /* Function assigned for the Cortex-M33 (Core #0)
  */
 void BOARD_InitFLEXIO_CAMERAPins(void); /* Function assigned for the Cortex-M33 (Core #0) */
 
+void BOARD_InitXSPI1_GPIO_Pins(void);
+
 #if defined(__cplusplus)
 }
 #endif

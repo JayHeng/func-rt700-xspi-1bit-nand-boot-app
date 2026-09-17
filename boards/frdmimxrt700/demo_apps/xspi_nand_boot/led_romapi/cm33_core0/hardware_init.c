@@ -16,6 +16,7 @@ void BOARD_InitHardware(void)
     BOARD_ConfigMPU();
     BOARD_InitBootPins();
     BOARD_InitLEDsPins();
+    BOARD_InitXSPI1_GPIO_Pins();
     BOARD_BootClockRUN();
     BOARD_InitDebugConsole();
 
