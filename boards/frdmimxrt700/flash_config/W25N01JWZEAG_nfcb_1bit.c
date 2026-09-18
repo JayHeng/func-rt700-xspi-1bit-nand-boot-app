@@ -21,11 +21,30 @@ __attribute__((section(".flash_conf"), used))
 #endif
 
 /* W25N01JWZEAG (1Gbit 1.8V Serial NAND) NAND Flash Config Block (NFCB).
- * Decoded from W25N01JWZEAG_nfcb.bin: 1-bit SPI commands with Quad (1-1-4)
- * page read at 120 MHz.
+ *
+ * Pure 1-bit (single line, x1) configuration: every LUT sequence, including the
+ * page data read and the program data load, uses IO0/IO1 only (Standard SPI).
+ * All opcodes and dummy counts follow Winbond W25N01JWxxxG/T Rev.D (Sep 2022),
+ * section 8.1.3 "Instruction Set Table 2 (Buffer Read, BUF = 1, xxxG default)":
+ *   0x0B Fast Read      : CA15-0 + 8 dummy clocks + x1 data out
+ *   0x84 Random Load    : CA15-0 + x1 data in, 0 dummy
+ *   0x13 Page Data Read : 8 dummy clocks + PA15-0
+ *   0xD8 Block Erase    : 8 dummy clocks + PA15-0
+ *   0x10 Program Execute: 8 dummy clocks + PA15-0
+ *   0x0F / 0x1F         : read / write status register (Axh, Bxh, Cxh), 0 dummy
+ *   0x06 Write Enable   : no address, no dummy
+ * Per table note 2 only CA11-0 of the column address is significant, and per
+ * note 3 PA is 16 bits (PA15-6 selects one of 1024 128KB blocks, PA5-0 selects
+ * one of 64 2KB pages).
+ * The Quad Enable bit (SR-2 bit 0) is written as 0 so IO2 keeps its /WP role and
+ * IO3 keeps /HOLD, which also disables every Quad instruction (section 7.2.6).
  */
 const fc_xspi_nfcb_t nand_config = {
-    .crcChecksum             = 0x1F3D0B52u,  /* pre-computed CRC in the golden binary */
+    /* NOTE: this CRC belongs to the original quad-read image. After switching to
+     * the pure 1-bit setup below, the value must be recalculated by the image
+     * generation tool, otherwise the ROM will reject this NFCB.
+     */
+    .crcChecksum             = 0x1F3D0B52u,
     .fingerprint             = 0x4E464342u,  /* ascii "BCFN" */
     .version                 = 0x00000001u,
     .DBBTSearchAreaStartPage = 64u,
@@ -55,27 +74,30 @@ const fc_xspi_nfcb_t nand_config = {
                         {
                             /* Unlock all blocks: write protect register 0xA0 = 0x00 */
                             [0] = {.seqNum = 1u, .seqId = 2u},
-                            /* Enable buffer read mode + ECC: config register 0xB0 = 0x19 */
+                            /* Config register 0xB0 = 0x18: BUF=1 (buffer read mode),
+                             * ECC-E=1 (internal ECC on), QE=0 (Quad disabled).
+                             */
                             [1] = {.seqNum = 1u, .seqId = 6u},
                         },
                     .configCmdArgs =
                         {
                             [0] = 0x00000000u,
-                            [1] = 0x00000019u,
+                            [1] = 0x00000018u,
                         },
                     .deviceType      = 2u, /* 2 - Serial NAND */
-                    .sflashPadType   = 4u, /* Quad pads for page data read */
-                    .serialClkFreq   = Fc_XspiSerialClk_120MHz,
+                    .sflashPadType   = 1u, /* 1 - Single pad, pure 1-bit access */
+                    .serialClkFreq   = Fc_XspiSerialClk_30MHz,
                     .sflashA1Size    = 0x10000000u, /* 1Gbit = 128 MByte */
                     .commandInterval = 50u,
                     .lookupTable =
                         {
-                            /* Seq 0: Read from cache buffer, 0x6B + 16-bit column address
-                             * + 8 dummy cycles + quad data read */
-                            [5 * 0 + 0] = FC_XSPI_LUT_SEQ(FC_CMD_SDR, FC_XSPI_1PAD, 0x6B,
+                            /* Seq 0: Fast Read from the data buffer (1-1-1), 0x0B +
+                             * CA15-0 + 8 dummy clocks + single line data read.
+                             */
+                            [5 * 0 + 0] = FC_XSPI_LUT_SEQ(FC_CMD_SDR, FC_XSPI_1PAD, 0x0B,
                                                           FC_CMD_CADDR_SDR, FC_XSPI_1PAD, 0x10),
-                            [5 * 0 + 1] = FC_XSPI_LUT_SEQ(FC_CMD_DUMMY_SDR, FC_XSPI_4PAD, 0x08,
-                                                          FC_CMD_READ_SDR, FC_XSPI_4PAD, 0x80),
+                            [5 * 0 + 1] = FC_XSPI_LUT_SEQ(FC_CMD_DUMMY_SDR, FC_XSPI_1PAD, 0x08,
+                                                          FC_CMD_READ_SDR, FC_XSPI_1PAD, 0x80),
 
                             /* Seq 1: Read status register, 0x0F + register address 0xC0 + 1 data byte */
                             [5 * 1 + 0] = FC_XSPI_LUT_SEQ(FC_CMD_SDR, FC_XSPI_1PAD, 0x0F,
@@ -93,7 +115,9 @@ const fc_xspi_nfcb_t nand_config = {
                             [5 * 3 + 0] = FC_XSPI_LUT_SEQ(FC_CMD_SDR, FC_XSPI_1PAD, 0x06,
                                                           FC_CMD_STOP, FC_XSPI_1PAD, 0x00),
 
-                            /* Seq 5: Block erase, 0xD8 + 8 dummy bits + row address */
+                            /* Seq 5: 128KB Block Erase, 0xD8 + 4 mode bits and 20 row address
+                             * bits, i.e. the 8 dummy clocks plus PA15-0 required by the device.
+                             */
                             [5 * 5 + 0] = FC_XSPI_LUT_SEQ(FC_CMD_SDR, FC_XSPI_1PAD, 0xD8,
                                                           FC_CMD_MODE4_SDR, FC_XSPI_1PAD, 0x00),
                             [5 * 5 + 1] = FC_XSPI_LUT_SEQ(FC_CMD_RADDR_SDR, FC_XSPI_1PAD, 0x14,
@@ -105,10 +129,13 @@ const fc_xspi_nfcb_t nand_config = {
                             [5 * 6 + 1] = FC_XSPI_LUT_SEQ(FC_CMD_WRITE_SDR, FC_XSPI_1PAD, 0x01,
                                                           FC_CMD_STOP, FC_XSPI_1PAD, 0x00),
 
-                            /* Seq 9: Quad load program data, 0x34 + 16-bit column address + quad data write */
-                            [5 * 9 + 0] = FC_XSPI_LUT_SEQ(FC_CMD_SDR, FC_XSPI_1PAD, 0x34,
+                            /* Seq 9: Random Load Program Data (1-1-1), 0x84 + CA15-0 +
+                             * single line data write. 0x84 is used instead of 0x02 so the
+                             * untouched part of the data buffer is preserved.
+                             */
+                            [5 * 9 + 0] = FC_XSPI_LUT_SEQ(FC_CMD_SDR, FC_XSPI_1PAD, 0x84,
                                                           FC_CMD_CADDR_SDR, FC_XSPI_1PAD, 0x10),
-                            [5 * 9 + 1] = FC_XSPI_LUT_SEQ(FC_CMD_WRITE_SDR, FC_XSPI_4PAD, 0x40,
+                            [5 * 9 + 1] = FC_XSPI_LUT_SEQ(FC_CMD_WRITE_SDR, FC_XSPI_1PAD, 0x40,
                                                           FC_CMD_STOP, FC_XSPI_1PAD, 0x00),
 
                             /* Seq 11: Page read to cache, 0x13 + 8 dummy bits + row address */
