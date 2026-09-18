@@ -1,0 +1,40 @@
+//////////////////////////////////////////////
+测试 W25N01JWZEAG
+
+.\blhost.exe -u 0x1fc9,0x0026 -- get-property 1
+Inject command 'get-property'
+Response status = 0 (0x0) Success.
+Response word 1 = 1258488320 (0x4b030200)
+Current Version = K3.2.0
+.\blhost.exe -u 0x1fc9,0x0026 -- write-memory 0x20020000 .\W25N01JWZEAG_nfcb_1bit.bin
+Inject command 'write-memory'
+Preparing to send 1024 (0x400) bytes to the target.
+Successful generic response to command 'write-memory'
+(1/1)100% Completed!
+Successful generic response to command 'write-memory'
+Response status = 0 (0x0) Success.
+Wrote 1024 of 1024 bytes.
+.\blhost.exe -u 0x1fc9,0x0026 -- configure-memory 0x102 0x20020000
+Inject command 'configure-memory'
+Successful generic response to command 'configure-memory'
+Response status = 0 (0x0) Success.
+
+//////////////////////////////////////////////
+测试 W25N01KWZEIG
+
+.\blhost.exe -u 0x1fc9,0x0026 -- get-property 1
+Inject command 'get-property'
+Response status = 0 (0x0) Success.
+Response word 1 = 1258488320 (0x4b030200)
+Current Version = K3.2.0
+.\blhost.exe -u 0x1fc9,0x0026 -- write-memory 0x20020000 .\W25N01JWZEAG_nfcb_1bit.bin
+Inject command 'write-memory'
+Preparing to send 1024 (0x400) bytes to the target.
+Successful generic response to command 'write-memory'
+(1/1)100% Completed!
+Successful generic response to command 'write-memory'
+Response status = 0 (0x0) Success.
+Wrote 1024 of 1024 bytes.
+.\blhost.exe -u 0x1fc9,0x0026 -- configure-memory 0x102 0x20020000
+Inject command 'configure-memory'
+Response status = 20809 (0x5149) Unknown error code (20809)

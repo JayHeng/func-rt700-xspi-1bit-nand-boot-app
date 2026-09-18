@@ -2702,7 +2702,13 @@
             <name>$PROJ_DIR$\..\..\..\..\..\flash_config\flash_config.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\flash_config\W25N01JWZEAG_nfcb.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\..\flash_config\W25N01JWZEAG_nfcb_1bit.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\flash_config\W25N01JWZEAG_nfcb_4bit.c</name>
+            <excluded>
+                <configuration>debug</configuration>
+            </excluded>
         </file>
     </group>
     <group>

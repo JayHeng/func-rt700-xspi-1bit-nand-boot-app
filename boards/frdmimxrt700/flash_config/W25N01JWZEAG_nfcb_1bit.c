@@ -40,11 +40,7 @@ __attribute__((section(".flash_conf"), used))
  * IO3 keeps /HOLD, which also disables every Quad instruction (section 7.2.6).
  */
 const fc_xspi_nfcb_t nand_config = {
-    /* NOTE: this CRC belongs to the original quad-read image. After switching to
-     * the pure 1-bit setup below, the value must be recalculated by the image
-     * generation tool, otherwise the ROM will reject this NFCB.
-     */
-    .crcChecksum             = 0x1F3D0B52u,
+    .crcChecksum             = 0xD3615006u,
     .fingerprint             = 0x4E464342u,  /* ascii "BCFN" */
     .version                 = 0x00000001u,
     .DBBTSearchAreaStartPage = 64u,
