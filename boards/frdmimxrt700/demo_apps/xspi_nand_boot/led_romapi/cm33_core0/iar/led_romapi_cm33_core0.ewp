@@ -245,7 +245,7 @@
                     <state>MCUXPRESSO_SDK</state>
                     <state>CPU_MIMXRT798SGVKB_cm33_core0</state>
                     <state>MIMXRT798S_cm33_core0_SERIES</state>
-                    <state>BOOT_HEADER_ENABLE=0</state>
+                    <state>BOOT_HEADER_ENABLE=1</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -701,7 +701,7 @@
                 <option>
                     <name>OOCOutputFormat</name>
                     <version>3</version>
-                    <state>0</state>
+                    <state>3</state>
                 </option>
                 <option>
                     <name>OCOutputOverride</name>
@@ -709,7 +709,7 @@
                 </option>
                 <option>
                     <name>OOCOutputFile</name>
-                    <state>led_romapi_cm33_core0.srec</state>
+                    <state>led_romapi_cm33_core0.bin</state>
                 </option>
                 <option>
                     <name>OOCCommandLineProducer</name>
@@ -2703,12 +2703,18 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\..\flash_config\W25N01JWZEAG_nfcb_1bit.c</name>
+            <excluded>
+                <configuration>debug</configuration>
+            </excluded>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\..\flash_config\W25N01JWZEAG_nfcb_4bit.c</name>
             <excluded>
                 <configuration>debug</configuration>
             </excluded>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\flash_config\W25N01KWZEIG_nfcb_1bit.c</name>
         </file>
     </group>
     <group>

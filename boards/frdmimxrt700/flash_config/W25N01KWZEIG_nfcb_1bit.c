@@ -20,27 +20,10 @@ __attribute__((section(".flash_conf"), used))
 #pragma location = ".flash_conf"
 #endif
 
-/* W25N01JWZEAG (1Gbit 1.8V Serial NAND) NAND Flash Config Block (NFCB).
- *
- * Pure 1-bit (single line, x1) configuration: every LUT sequence, including the
- * page data read and the program data load, uses IO0/IO1 only (Standard SPI).
- * All opcodes and dummy counts follow Winbond W25N01JWxxxG/T Rev.D (Sep 2022),
- * section 8.1.3 "Instruction Set Table 2 (Buffer Read, BUF = 1, xxxG default)":
- *   0x0B Fast Read      : CA15-0 + 8 dummy clocks + x1 data out
- *   0x84 Random Load    : CA15-0 + x1 data in, 0 dummy
- *   0x13 Page Data Read : 8 dummy clocks + PA15-0
- *   0xD8 Block Erase    : 8 dummy clocks + PA15-0
- *   0x10 Program Execute: 8 dummy clocks + PA15-0
- *   0x0F / 0x1F         : read / write status register (Axh, Bxh, Cxh), 0 dummy
- *   0x06 Write Enable   : no address, no dummy
- * Per table note 2 only CA11-0 of the column address is significant, and per
- * note 3 PA is 16 bits (PA15-6 selects one of 1024 128KB blocks, PA5-0 selects
- * one of 64 2KB pages).
- * The Quad Enable bit (SR-2 bit 0) is written as 0 so IO2 keeps its /WP role and
- * IO3 keeps /HOLD, which also disables every Quad instruction (section 7.2.6).
+/* W25N01KWZEIG (1Gbit 1.8V Serial NAND) NAND Flash Config Block (NFCB).
  */
 const fc_xspi_nfcb_t nand_config = {
-    .crcChecksum             = 0xD3615006u,
+    .crcChecksum             = 0x1CF8E2F9u,
     .fingerprint             = 0x4E464342u,  /* ascii "BCFN" */
     .version                 = 0x00000001u,
     .DBBTSearchAreaStartPage = 64u,
@@ -70,15 +53,15 @@ const fc_xspi_nfcb_t nand_config = {
                         {
                             /* Unlock all blocks: write protect register 0xA0 = 0x00 */
                             [0] = {.seqNum = 1u, .seqId = 2u},
-                            /* Config register 0xB0 = 0x18: BUF=1 (buffer read mode),
-                             * ECC-E=1 (internal ECC on), QE=0 (Quad disabled).
+                            /* Config register 0xB0 = 0x19: BUF=1 (buffer read mode),
+                             * ECC-E=1 (internal ECC on), H-DIS=1.
                              */
                             [1] = {.seqNum = 1u, .seqId = 6u},
                         },
                     .configCmdArgs =
                         {
                             [0] = 0x00000000u,
-                            [1] = 0x00000018u,
+                            [1] = 0x00000019u,
                         },
                     .deviceType      = 2u, /* 2 - Serial NAND */
                     .sflashPadType   = 1u, /* 1 - Single pad, pure 1-bit access */
