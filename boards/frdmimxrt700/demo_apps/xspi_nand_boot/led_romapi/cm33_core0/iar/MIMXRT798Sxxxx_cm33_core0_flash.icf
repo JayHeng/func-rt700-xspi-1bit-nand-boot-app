@@ -73,7 +73,7 @@ else
 define symbol m_core1_image_maximum_size       = 0x00080000;
 define symbol m_ezhv_image_maximum_size        = 0x00008000;
 
-define symbol m_boot_flash_conf_start          = 0x28000000;
+define symbol m_boot_flash_conf_start          = 0x0007C000;// = 0x28000000;
 
 define exported symbol __VECTOR_TABLE          = m_interrupts_start;
 define exported symbol __VECTOR_RAM            = isdefinedsymbol(__ram_vector_table__) ? m_interrupts_ram_start : m_interrupts_start;

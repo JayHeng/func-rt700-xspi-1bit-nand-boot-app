@@ -2694,9 +2694,15 @@
         <name>flash_config</name>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\..\flash_config\flash_config.c</name>
+            <excluded>
+                <configuration>debug</configuration>
+            </excluded>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\..\flash_config\flash_config.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\flash_config\W25N01JWZEAG_nfcb.c</name>
         </file>
     </group>
     <group>
