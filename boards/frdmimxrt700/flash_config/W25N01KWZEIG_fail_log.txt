@@ -29,14 +29,12 @@ configure-memory 0x102 0x2001f000
 "description" : "20809 (0x5149) Unknown error code (20809)",
 
 //////////////////////////////////////////////////////
-fill-memory 0x2001f000 0x00000004 0xcf900001 word
-configure-memory 0x102 0x2001f000
-fill-memory 0x2001f000 4 0xC1000106 word
-fill-memory 0x2001f004 4 0x2001F018 word
-fill-memory 0x2001f008 4 0x20001 word
-fill-memory 0x2001f00c 4 0x30001 word
-fill-memory 0x2001f010 4 0x40001 word
-fill-memory 0x2001f014 4 0x50001 word
-fill-memory 0x2001f018 4 0xC0010021 word
-configure-memory 0x102 0x2001f000
+fill-memory 0x20020000 0x00000004 0xcf900001 word
+configure-memory 0x102 0x20020000
+fill-memory 0x20020000 0x00000004 0xC1000104 word
+fill-memory 0x20020004 0x00000004 0x20020010 word
+fill-memory 0x20020008 0x00000004 0x00020001 word
+fill-memory 0x2002000C 0x00000004 0x00030001 word
+fill-memory 0x20020010 0x00000004 0xC0010026 word
+configure-memory 0x102 0x20020000
 "description" : "20809 (0x5149) Unknown error code (20809)"
