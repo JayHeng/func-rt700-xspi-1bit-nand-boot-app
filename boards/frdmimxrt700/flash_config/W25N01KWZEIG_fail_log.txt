@@ -1,0 +1,42 @@
+fill-memory 0x20020000 0x00000004 0xcf900000 word
+configure-memory 0x102 0x20020000
+fill-memory 0x20020000 0x00000004 0xc1000106 word
+fill-memory 0x20020004 0x00000004 0x20020018 word
+fill-memory 0x20020008 0x00000004 0x20001 word
+fill-memory 0x2002000c 0x00000004 0x30001 word
+fill-memory 0x20020010 0x00000004 0x40001 word
+fill-memory 0x20020014 0x00000004 0x50001 word
+fill-memory 0x20020018 0x00000004 0xc0020021 word
+configure-memory 0x102 0x20020000
+"description" : "0 (0x0) Success."
+
+flash-erase-region 0x2 0x1 0x102
+flash-erase-region 0x3 0x1 0x102
+flash-erase-region 0x4 0x1 0x102
+flash-erase-region 0x5 0x1 0x102
+write-memory 0x00000005 "c:/Users/nxf91386/hub_bitbucket/rom_auto/temp/cipher_normal_sb_73e07.bin" 0x102
+write-memory 0x205c0000 "c:/Users/nxf91386/hub_bitbucket/rom_auto/temp/MCXNImageGen_PLAIN_0e810.bin"
+
+//////////////////////////////////////////////////////
+fill-memory 0x2001f000 0x00000004 0xcf900001 word
+configure-memory 0x102 0x2001f000
+fill-memory 0x2001f000 4 0xC2000103
+fill-memory 0x2001f004 4 0x2001F00C
+fill-memory 0x2001f008 4 0x40004
+fill-memory 0x2001f00C 4 0xC1010023
+fill-memory 0x2001f010 4 0x000000EF
+configure-memory 0x102 0x2001f000
+"description" : "20809 (0x5149) Unknown error code (20809)",
+
+//////////////////////////////////////////////////////
+fill-memory 0x2001f000 0x00000004 0xcf900001 word
+configure-memory 0x102 0x2001f000
+fill-memory 0x2001f000 4 0xC1000106 word
+fill-memory 0x2001f004 4 0x2001F018 word
+fill-memory 0x2001f008 4 0x20001 word
+fill-memory 0x2001f00c 4 0x30001 word
+fill-memory 0x2001f010 4 0x40001 word
+fill-memory 0x2001f014 4 0x50001 word
+fill-memory 0x2001f018 4 0xC0010021 word
+configure-memory 0x102 0x2001f000
+"description" : "20809 (0x5149) Unknown error code (20809)"
