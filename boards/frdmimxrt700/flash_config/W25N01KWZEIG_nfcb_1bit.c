@@ -23,7 +23,7 @@ __attribute__((section(".flash_conf"), used))
 /* W25N01KWZEIG (1Gbit 1.8V Serial NAND) NAND Flash Config Block (NFCB).
  */
 const fc_xspi_nfcb_t nand_config = {
-    .crcChecksum             = 0x2FDD0FDCu,
+    .crcChecksum             = 0xF16E4581u,
     .fingerprint             = 0x4E464342u,  /* ascii "BCFN" */
     .version                 = 0x00000001u,
     .DBBTSearchAreaStartPage = 64u,
@@ -139,7 +139,7 @@ const fc_xspi_nfcb_t nand_config = {
             .pageDataSize         = 2048u,
             .pageTotalSize        = 4096u,
             .pagesPerBlock        = 64u,
-            .bypassEccRead        = false,
+            .bypassEccRead        = true,
             .eccCheckCustomEnable = 1u,
             .eccStatusMask        = 0x00000030u, /* status register bits [5:4] hold ECC status */
             .eccFailureMask       = 0x00000020u, /* value 0x2 in ECC status field means uncorrectable */
