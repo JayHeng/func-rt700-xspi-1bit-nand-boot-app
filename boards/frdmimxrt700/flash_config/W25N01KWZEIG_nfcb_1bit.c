@@ -139,6 +139,7 @@ const fc_xspi_nfcb_t nand_config = {
             .pageDataSize         = 2048u,
             .pageTotalSize        = 4096u,
             .pagesPerBlock        = 64u,
+            .bypassEccRead        = false,
             .eccCheckCustomEnable = 1u,
             .eccStatusMask        = 0x00000030u, /* status register bits [5:4] hold ECC status */
             .eccFailureMask       = 0x00000020u, /* value 0x2 in ECC status field means uncorrectable */

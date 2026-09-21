@@ -40,6 +40,7 @@ __attribute__((section(".flash_conf"), used))
  * IO3 keeps /HOLD, which also disables every Quad instruction (section 7.2.6).
  */
 const fc_xspi_nfcb_t nand_config = {
+    //.crcChecksum             = 0xCA1B9CB1u,
     .crcChecksum             = 0xD3615006u,
     .fingerprint             = 0x4E464342u,  /* ascii "BCFN" */
     .version                 = 0x00000001u,
@@ -61,6 +62,7 @@ const fc_xspi_nfcb_t nand_config = {
                      * FC_XSPI_CFG_BLK_VERSION. Keep it identical to the known working image.
                      */
                     .version            = 0x56010000u,
+                    //.readSampleClkSrc   = kXSPIReadSampleClk_LoopbackInternally,
                     .readSampleClkSrc   = kXSPIReadSampleClk_LoopbackFromDqsPad,
                     .csHoldTime         = 3u,
                     .csSetupTime        = 3u,
@@ -156,6 +158,7 @@ const fc_xspi_nfcb_t nand_config = {
             .pageDataSize         = 2048u,
             .pageTotalSize        = 4096u,
             .pagesPerBlock        = 64u,
+            .bypassEccRead        = false,
             .eccCheckCustomEnable = 1u,
             .eccStatusMask        = 0x00000030u, /* status register bits [5:4] hold ECC status */
             .eccFailureMask       = 0x00000020u, /* value 0x2 in ECC status field means uncorrectable */
